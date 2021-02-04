@@ -1,16 +1,17 @@
 import "../blocks/Login.css";
-import { useState } from "react";
-import {useHistory} from 'react-router-dom';
+import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { LoggedInContext } from "../contexts/LoggedInContext";
 
-const Login = (props) => {
-    const history = useHistory();
-  
+const Login = () => {
+  let changeLoggedStatus = useContext(LoggedInContext);
+  const history = useHistory();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   function handleUserNameChange(e) {
     setUsername(e.target.value);
-    console.log(props);
   }
 
   function handlePasswordChange(e) {
@@ -20,9 +21,18 @@ const Login = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (username !== "" && password !== "") {
-      localStorage.setItem("username", `${username}`);
-      localStorage.setItem("password", `${password}`);
-      history.push("/main");
+      let myUserName = localStorage.getItem("username", `${username}`);
+      let myUserPassword = localStorage.getItem("password", `${password}`);
+
+      if (username === myUserName && password === myUserPassword) {
+        changeLoggedStatus.setIsLoggedIn(
+          (changeLoggedStatus.IsLoggedIn = true)
+        );
+        history.push("/main");
+        console.log(changeLoggedStatus);
+      } else {
+        alert("Please enter correct information");
+      }
     } else {
       alert("Please enter your username and password");
     }

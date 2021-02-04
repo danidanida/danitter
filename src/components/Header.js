@@ -1,12 +1,20 @@
-import { Nav, Form, Navbar, Button } from "react-bootstrap";
-import {useHistory} from 'react-router-dom';
+import { Nav, Navbar, Button } from "react-bootstrap";
+import { useHistory, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { LoggedInContext } from "../contexts/LoggedInContext";
 
-const Header = (props) => {
+const Header = () => {
+  const changeLoggedStatus = useContext(LoggedInContext);
+
+  console.log(changeLoggedStatus);
+
+  let location = useLocation();
   const history = useHistory();
 
   function logOut() {
     localStorage.clear();
-    history.push("/sing-in");
+    changeLoggedStatus.setIsLoggedIn((changeLoggedStatus.isLoggedIn = false));
+    history.push("/sing-up");
   }
 
   return (
@@ -14,20 +22,22 @@ const Header = (props) => {
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="#home">Danitter</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="#home">Home</Nav.Link>
-          <Nav.Link href="#features">My Danitter</Nav.Link>
+        {changeLoggedStatus.isLoggedIn && <Nav.Link href="#">My Danitter</Nav.Link>}
         </Nav>
-        {!props.isLoggedIn && (
-          <Button variant="outline-primary">Sign-in</Button>
-        )}
-        {!props.isLoggedIn && (
-          <Button variant="outline-primary">Register</Button>
-        )}
-        {props.isLoggedIn && (
-          <Button variant="outline-primary" onClick={logOut}>
-            Sign-out
-          </Button>
-        )}
+        {!changeLoggedStatus.isLoggedIn &&
+          location.pathname !== "/sing-in" && (
+            <Nav.Link href="/sing-in"> Sign-in </Nav.Link>
+          )}
+        {!changeLoggedStatus.isLoggedIn &&
+          location.pathname !== "/sing-up" && (
+            <Nav.Link href="/sing-up">Register </Nav.Link>
+          )}
+        {changeLoggedStatus.isLoggedIn &&
+          location.pathname === "/main" && (
+            <Button variant="outline-primary" onClick={logOut}>
+              Sign-out
+            </Button>
+          )}
       </Navbar>
     </>
   );

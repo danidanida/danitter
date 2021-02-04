@@ -1,10 +1,11 @@
-import '../blocks/Login.css';
+import "../blocks/Login.css";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const Register = (props) => {
-    console.log(props)
-    
-const [username, setUsername] = useState("");
+  const history = useHistory();
+
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   function handleUserNameChange(e) {
@@ -18,9 +19,9 @@ const [username, setUsername] = useState("");
   function handleSubmit(e) {
     e.preventDefault();
     if (username !== "" && password !== "") {
-   
       localStorage.setItem("username", `${username}`);
       localStorage.setItem("password", `${password}`);
+      history.push("/sing-in");
     } else {
       alert("Please enter your username and password");
     }
@@ -71,8 +72,7 @@ const [username, setUsername] = useState("");
         </fieldset>
       </section>
     </>
-    );
-  }
-  
-  
-  export default Register;
+  );
+};
+
+export default Register;
