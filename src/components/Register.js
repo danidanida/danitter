@@ -2,7 +2,7 @@ import "../blocks/Login.css";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const Register = (props) => {
+const Register = () => {
   const history = useHistory();
 
   const [username, setUsername] = useState("");
@@ -19,8 +19,12 @@ const Register = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (username !== "" && password !== "") {
+      var d = new Date();
       localStorage.setItem("username", `${username}`);
       localStorage.setItem("password", `${password}`);
+      localStorage.setItem("registration_time", `${d}`);
+      console.log(d)
+      console.log(localStorage)
       history.push("/sing-in");
     } else {
       alert("Please enter your username and password");

@@ -12,7 +12,6 @@ const Header = () => {
   const history = useHistory();
 
   function logOut() {
-    localStorage.clear();
     changeLoggedStatus.setIsLoggedIn((changeLoggedStatus.isLoggedIn = false));
     history.push("/sing-up");
   }
@@ -20,9 +19,9 @@ const Header = () => {
   return (
     <>
       <Navbar bg="light" variant="light">
-        <Navbar.Brand href="#home">Danitter</Navbar.Brand>
+        <Navbar.Brand href="/main">Danitter</Navbar.Brand>
         <Nav className="mr-auto">
-        {changeLoggedStatus.isLoggedIn && <Nav.Link href="#">My Danitter</Nav.Link>}
+        {changeLoggedStatus.isLoggedIn && <Nav.Link href="/my-page">My Danitter</Nav.Link>}
         </Nav>
         {!changeLoggedStatus.isLoggedIn &&
           location.pathname !== "/sing-in" && (
@@ -32,8 +31,8 @@ const Header = () => {
           location.pathname !== "/sing-up" && (
             <Nav.Link href="/sing-up">Register </Nav.Link>
           )}
-        {changeLoggedStatus.isLoggedIn &&
-          location.pathname === "/main" && (
+        {changeLoggedStatus.isLoggedIn && (
+          location.pathname === "/main" || location.pathname === "/my-page") && (
             <Button variant="outline-primary" onClick={logOut}>
               Sign-out
             </Button>
